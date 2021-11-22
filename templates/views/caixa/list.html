@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Caixas</h3>
+                    <a class="btn btn-primary float-right" href="{% url 'criarCaixa' %}"><i class="fa fa-plus-circle"></i> Nova Caixa</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nome</th>
+                      <th scope="col">Data de Fabricação</th>
+                    <th scope="col">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for element in list %}
+                      <tr>
+                        <th scope="row">
+                            {{ element.codigoBarras }}
+                        </th>
+                        <th scope="row">
+                            {{ element.dataFabricacao }}
+                        </th>
+                        <td>
+                            <div>
+                                <a class="mt-2 btn btn-default float-left" href="{% url 'saidaCaixa' id=element.id %}"><i class="fa fa-sign-out fa-1x text-white"></i></a>
+                                 <a class="mt-2 btn btn-warning float-left" href="{% url 'atualizarCaixa' id=element.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
+                                <a class="mt-2 btn btn-danger float-left deletar" url="{% url 'deletarCaixa' id=element.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                            </div>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

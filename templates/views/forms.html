@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="col-12">
+  <div class="card bg-secondary shadow">
+    <div class="card-header bg-white border-0">
+      <div class="row align-items-center">
+        <div class="col-8">
+            {% block title_page %}
+            {% endblock title_page %}
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+        {% block form_body %}
+        {% endblock form_body %}
+    </div>
+  </div>
+</div>
+{% endblock main %}
+
+

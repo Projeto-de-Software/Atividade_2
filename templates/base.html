@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    Bom leite - Estoque
+  </title>
+  <!-- Favicon -->
+  <link href="{% static 'assets/img/brand/favicon.png' %}" rel="icon" type="image/png">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="{% static 'assets/js/plugins/nucleo/css/nucleo.css' %}" rel="stylesheet" />
+
+  <!-- CSS Files -->
+  <link href="{% static 'assets/css/argon-dashboard.css' %}" rel="stylesheet" />
+</head>
+
+<body class="">
+    {% include '_menu.html' %}
+  <div class="main-content">
+    <!-- Navbar -->
+    {% include '_topbar.html' %}
+    <!-- Header -->
+    <div class="header bg-gradient-primary pb-7 pt-5 pt-md-7">
+        {% block header %}
+        
+        {% endblock %}
+    </div>
+    <div class="container-fluid mt--7">
+      <div class="row">
+          {% block main %}
+          
+          {% endblock %}
+      </div>
+      <!-- Footer -->
+      {% include '_footer.html' %}
+    </div>
+  </div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalDeletarItem">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Deletar item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="textModalDeletar">Deseja deletar este item?</p>
+      </div>
+      <div class="modal-footer">
+        <a type="button" id="confirmaDeletar" href="#" class="btn btn-danger">Sim</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="livestream_scanner">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header bg-primary">
+				<h4 class="modal-title float-left text-white">Leitor de código de barras</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="position: static">
+				<video id="preview"></video>
+				<div class="error"></div>
+			</div>
+			<div class="modal-footer">
+                <div class="row">
+                    <div class="col-12">
+                    </div>
+                </div>
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+  <!--   Core   -->
+  <script src="{% static 'assets/js/plugins/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <!--   Optional JS   -->
+  <script src="{% static 'assets/js/plugins/chart.js/dist/Chart.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chart.js/dist/Chart.extension.js' %}"></script>
+  <!--   Argon JS   -->
+  <script src="{% static 'assets/js/argon-dashboard.min.js' %}"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+    <script src="https://kit.fontawesome.com/b4562a09a3.js" crossorigin="anonymous"></script>
+  <script>
+    window.TrackJS &&
+      TrackJS.install({
+        token: "ee6fab19c5a04ac1a32a645abde4613a",
+        application: "argon-dashboard-free"
+      });
+  </script>
+    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/quagga.min.js' %}"></script>
+    {% block js %}
+    
+    {% endblock %}
+</body>
+
+</html>

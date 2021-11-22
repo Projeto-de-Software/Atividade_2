@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Setor</h3>
+                    <a class="btn btn-primary float-right" href="{% url 'criarSetor' %}"><i class="fa fa-plus-circle"></i> Novo Setor</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for element in list %}
+                      <tr>
+                        <th scope="row">
+                            {{ element.nomeSetor }}
+                        </th>
+                        <td>
+                            <div>
+                                <a class="btn btn-warning float-left" href="{% url 'atualizarSetor' id=element.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
+                                <a class="btn btn-danger float-left deletar" url="{% url 'deletarSetor' id=element.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                            </div>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
