@@ -400,3 +400,6 @@ def listaMovimentacao(request):
     }
 
     return render(request, 'views/movimentacao/list.html', data)
+
+def saidaPaletSetor(request):
+    return  True
