@@ -26,5 +26,8 @@ $(document).ready(()=> {
     else if (url.toString().indexOf('setor') > -1) {
         $(".all-nav-item").removeClass("active");
         $('.setor').addClass("active");
+    } else if (url.toString().indexOf('regra') > -1){
+        $(".all-nav-item").removeClass("active");
+        $('.regra').addClass("active");
     }
 });

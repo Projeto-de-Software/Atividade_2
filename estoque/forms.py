@@ -1,6 +1,9 @@
+import time
+
 from django.forms import ModelForm
 from django import forms
 from .models import *
+from .helpers import *
 
 class ArmazenForm(ModelForm):
     class Meta:
@@ -21,11 +24,13 @@ class ArmazenForm(ModelForm):
 class PaletForm(ModelForm):
     class Meta:
         model = Palet
-        fields = ('codigoBarras', 'dataCriacao', 'quantidadeItens')
+        fields = ('codigoBarras', 'dataCriacao', 'quantidadeItens','tipoCaixa','produto')
         labels = {
             'codigoBarras': ('Código de barras: '),
             'dataCriacao': ('Data de Fabricação: '),
-            'quantidadeItens': ('Quantidade de itens suportados: ')
+            'quantidadeItens': ('Quantidade de itens: '),
+            'tipoCaixa': ('Regra: '),
+            'produto' : ('Produto:')
         }
         error_messages = {
             'codigoBarras': {
@@ -40,11 +45,17 @@ class PaletForm(ModelForm):
             'quantidadeItens': {
                 'blank': ('Não é possível adicionar um palet sem a quantidade de itens que ele armazena.'),
                 'null': ('Não é possível adicionar um palet sem a quantidade de itens que ele armazena.')
+            },
+            'tipoCaixa' : {
+                'blank': ('Não é possível adicionar um palet sem selecionar o tipo de caixa.'),
+                'null': ('Não é possível adicionar um palet sem selecionar o tipo de caixa.')
             }
         }
 
         widgets = {
             'dataCriacao': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control','type': 'date'}),
+            'tipoCaixa' : forms.Select(attrs={'class':'form-contrl select-search'}),
+            'produto': forms.Select(attrs={'class': 'form-contrl select-search'})
         }
 
 class ProdutoForm(ModelForm):
@@ -66,12 +77,14 @@ class ProdutoForm(ModelForm):
 class CaixaForm(ModelForm):
     class Meta:
         model = Caixa
-        fields = ('codigoBarras', 'dataFabricacao', 'produto', 'palet')
+        fields = ('codigoBarras', 'dataFabricacao', 'produto', 'palet','tipoCaixa', 'quantidadeProdutosCaixa')
         labels = {
             'codigoBarras': ('Código de barras: '),
             'dataFabricacao': ('Data de Fabricação: '),
             'produto': ('Produto: '),
-            'palet': ('Código do palet: ')
+            'palet': ('Código do palet: '),
+            'tipoCaixa': ('Tipo da Caixa: '),
+            'quantidadeProdutosCaixa': ('Quantidade de produtos:')
         }
         #help_texts = {'title': ('Digite o título do projeto'),}
         error_messages = {
@@ -91,11 +104,18 @@ class CaixaForm(ModelForm):
             'palet': {
                 'blank': ('Não é possível adicionar uma caixa sem informar o código do palet.'),
                 'null': ('Não é possível adicionar uma caixa sem informar o código do palet.')
+            },
+            'tipoCaixa': {
+                'blank': ('Não é possível adicionar uma caixa sem informar o tipo de caixa.'),
+                'null': ('Não é possível adicionar uma caixa sem informar o tipo de caixa.')
             }
 
         }
         widgets = {
             'dataFabricacao': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control','type': 'date'}),
+            'tipoCaixa' : forms.Select(attrs={'class': 'form-control select-search'}),
+            'palet' : forms.Select(attrs={'class': 'form-control select-search'}),
+            'produto' : forms.Select(attrs={'class': 'form-control select-search'}),
         }
 
 class SetorForm(ModelForm):
@@ -131,6 +151,7 @@ class SetorForm(ModelForm):
         }
         widgets = {
             'dataCriacao': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control','type': 'date'}),
+            'armazem': forms.Select(attrs={'class':'form-control select-search'})
         }
 
 
@@ -179,4 +200,53 @@ class CaixaSaidaForm(ModelForm):
         }
 
 
+class SetorLocalizacaoForm(ModelForm):
+    class Meta:
+        model = SetorLocalizacao
+        fields = '__all__'
+        labels = {
+            'coluna' : ('Quantidade de Secções:'),
+            'linha': ('Quantidade de Prateleiras:'),
+            'setor': ('Setor:')
+        }
+        error_messages = {
+            'coluna': {
+                'blank': ('Não é possível gerar as localizações sem informar a quantidade de secções.'),
+                'null': ('Não é possível gerar as localizações sem informar a quantidade de secções.')
+            },
+            'linha': {
+                'blank': ('Não é possível gerar as localizações sem informar a quantidade de prateleiras.'),
+                'null': ('Não é possível gerar as localizações sem informar a quantidade de prateleiras.')
+            },
+        }
+        widgets = {
+            'setor': forms.Select(attrs={'disabled': True})
+        }
 
+class TipoCaixaForm(ModelForm):
+    class Meta:
+        model = TipoCaixa
+        fields = '__all__'
+        labels = {
+            'tipo': ('Modo:'),
+            'tipoCaixa': ('Tipo Caixa:'),
+            'quantidadeProdutosTipoCaixa': ('Quantidade:'),
+            'produto': ('Produto:')
+        }
+
+
+class EntradaPaletSetorForm(forms.Form):
+    palet = forms.ChoiceField(label='Palet: ', choices=(), widget=forms.Select(attrs={'class':'select-palet'}))
+    setor = forms.ChoiceField(label='Setor: ', choices=(), widget=forms.Select(attrs={'class':'select-setor'}))
+    setorLocalizacao = forms.ChoiceField(label='Localizacão: ', choices=(), widget=forms.Select(attrs={'class':'select-setor-localizacao'}))
+    dataInicoAlocacao = forms.DateField(label="Data Alocação" ,widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control','type': 'date'}))
+
+
+class SaidaPaletSetorForm(forms.Form):
+    palet = forms.ChoiceField(label='Palet: ', choices=(), widget=forms.Select(attrs={'class': 'select-palet'}))
+    setor = forms.ChoiceField(label='Setor: ', choices=(), widget=forms.Select(attrs={'class': 'select-setor'}))
+    setorLocalizacao = forms.ChoiceField(label='Localizacão: ', choices=(),
+                                         widget=forms.Select(attrs={'class': 'select-setor-localizacao'}))
+    dataInicoAlocacao = forms.DateField(label="Data Alocação", widget=forms.DateInput(format=('%Y-%m-%d'),
+                                                                                      attrs={'class': 'form-control',
+                                                                                             'type': 'date'}))

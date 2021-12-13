@@ -1,9 +1,16 @@
+from datetime import date
+
 from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 from .forms import *
+from django.core import serializers
+import datetime
+
 # Create your views here.
 def home (request):
-    return render(request,'base.html')
+    return render(request,'home.html')
 
 def armazemCriar(request):
     form = ArmazenForm(request.POST or None)
@@ -61,7 +68,12 @@ def criarProduto(request):
         return render(request, 'views/produto/create.html', data)
 
 def listArmazem(request):
-    list = Armazem.objects.all()
+    list = []
+    try:
+        list = Armazem.objects.all()
+    except Exception as e:
+        list = []
+
     data = {
         'list': list
     }
@@ -75,21 +87,36 @@ def listSetor(request):
     return render(request , 'views/setor/list.html', data)
 
 def listCaixa(request):
-    list = Caixa.objects.all().order_by('dataFabricacao')
+    list = []
+    try:
+        list = Caixa.objects.all().order_by('dataFabricacao')
+    except Exception as e:
+        list = []
+
     data = {
         'list': list
     }
     return render(request , 'views/caixa/list.html', data)
 
 def listPalet(request):
-    list = Palet.objects.all()
+    list = []
+    try:
+        list = Palet.objects.all()
+    except Exception as e:
+        list = []
+
     data = {
         'list': list
     }
     return render(request , 'views/palet/list.html', data)
 
 def listProduto(request):
-    list = Produto.objects.all()
+    list = []
+    try:
+        list = Produto.objects.all()
+    except Exception as e:
+        list = []
+
     data = {
         'list': list
     }
@@ -202,7 +229,7 @@ def deletarPalet(request, id):
     objectElemet = Palet.objects.get(id=id)
     if (objectElemet != None):
         objectElemet.delete()
-    return redirect('')
+    return redirect('listarPalet')
 
 def deletarProduto(request, id):
     objectElemet = Produto.objects.get(id=id)
@@ -227,3 +254,149 @@ def caixaSaida(request, id):
             return redirect('listarCaixa')
     else:
         return render(request, 'views/movimentacao/caixa_saida.html', data)
+
+
+def setorLocalizacaoList(request, id):
+    list = []
+    try:
+        list = SetorLocalizacao.objects.filter(setor_id=id)
+    except Exception as e:
+        list = []
+
+    setor = Setor.objects.get(id=id)
+    data = {
+        'list': list,
+        'setor': setor
+    }
+
+    return render(request, 'views/setor/localizacao.html', data)
+
+
+def criarSetorLocalizacao(request, id):
+    data = {}
+    setorLocalizacoes = None
+    form = None
+
+    setor = id
+
+    form = SetorLocalizacaoForm(request.POST or None)
+    setor = Setor.objects.get(id=id)
+
+    if(request.method == 'POST'):
+        quantidadeColuna = int(form.data['coluna'])+1
+        quantidadeLinha = int(form.data['linha'])+1
+        for i in range(1,quantidadeColuna,1):
+            for j in range (1,quantidadeLinha,1):
+                try:
+                    isCreate = SetorLocalizacao.objects.get(coluna=i,linha=j,setor_id=id)
+                except Exception as e:
+                    setorLocalizacao = SetorLocalizacao(coluna=i, linha=j, setor_id=id)
+                    setorLocalizacao.save()
+
+        return redirect(reverse('localizacoesSetor', kwargs={"id": id}))
+    else:
+        form = SetorLocalizacaoForm()
+        form.fields['setor'].initial = setor.id
+        data = {
+            'form': form,
+            'nome': setor.nomeSetor,
+            'id': setor.id
+        }
+        return render(request, 'views/setor/generation_localization.html', data)
+
+
+def criarTipoCaixa(request):
+    form = TipoCaixaForm(request.POST or None)
+    if(request.method == 'POST'):
+        if(form.is_valid()):
+            form.save()
+            return redirect('listarTipoCaixa')
+    else:
+        form = TipoCaixaForm()
+        data = {'form': form }
+        return render(request, 'views/tipo_caixa/create.html', data)
+
+def deletarTipoCaixa(request, id):
+    objectElemet = TipoCaixa.objects.get(id=id)
+    if (objectElemet != None):
+        objectElemet.delete()
+    return redirect('listarTipoCaixa')
+
+def atualizarTipoCaixa(request, id):
+    data ={}
+    objectElemet = TipoCaixa.objects.get(id=id)
+    form = TipoCaixaForm(request.POST or None, instance=objectElemet)
+    data = {
+        'nome': objectElemet.__str__(),
+        'id': objectElemet.id,
+        'form': form
+    }
+
+    if (request.method == 'POST'):
+        if (form.is_valid()):
+            form.save()
+            return redirect('listarTipoCaixa')
+    else:
+        return render(request, 'views/tipo_caixa/update.html', data)
+
+
+def listTipoCaixa(request):
+    list = TipoCaixa.objects.all()
+    first = None
+    try:
+        first = list.first()
+    except Exception as e:
+        first = None
+
+    data = {
+        'list': ([] if first == None else list)
+    }
+
+    return render(request , 'views/tipo_caixa/list.html', data)
+
+
+def listPaletSetor():
+    return True
+
+def entradaPaletSetor(request):
+
+    if(request.method == 'POST'):
+        form = EntradaPaletSetorForm(request.POST or None)
+
+        paletSetor = PaletSetor()
+        paletSetor.setorLocalizacao_id = request.POST['setorLocalizacao']
+        paletSetor.dataInicoAlocacao = request.POST['dataInicoAlocacao']
+        paletSetor.palet_id = request.POST['palet']
+        paletSetor.save()
+
+        return redirect('listarPaletsArmazenados')
+
+    else:
+        paletes = Palet.objects.exclude(paletsetor__in=PaletSetor.objects.all())
+        setores = Setor.objects.all()
+        paletsLocais = PaletSetor.objects.filter(dataFimAlocacao = None)
+        setorLocalizacaoDisponivel = SetorLocalizacao.objects.exclude(paletsetor__in = paletsLocais)
+        form = EntradaPaletSetorForm()
+
+        data =  {
+            'palets': serializers.serialize("json",paletes),
+            'setores' : serializers.serialize("json",setores),
+            'setoresLocalizacao': serializers.serialize("json",setorLocalizacaoDisponivel),
+            'form': form
+        }
+
+        return render(request, 'views/movimentacao/palet_setor.html', data)
+
+def listaMovimentacao(request):
+    list = PaletSetor.objects.all().filter(dataFimAlocacao = None)
+    first = None
+    try:
+        first = list.first()
+    except Exception as e:
+        first = None
+
+    data = {
+        'list': ([] if first == None else list)
+    }
+
+    return render(request, 'views/movimentacao/list.html', data)

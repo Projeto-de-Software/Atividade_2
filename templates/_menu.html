@@ -6,7 +6,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <!-- Brand -->
-      <a class="navbar-brand pt-0" href="">
+      <a class="navbar-brand pt-0" href="/">
         <img src="{% static 'assets/img/brand/logo.png' %}" class="navbar-brand-img" alt="...">
       </a>
       <!-- User -->
@@ -17,7 +17,7 @@
             <div class="navbar-collapse-header d-md-none">
               <div class="row">
                 <div class="col-6 collapse-brand">
-                  <a href="">
+                  <a href="/">
                     <img src="{% static 'assets/img/brand/logo.png' %}">
                   </a>
                 </div>
@@ -53,6 +53,11 @@
           <li class="nav-item ">
             <a class="nav-link all-nav-item setor" href="{% url 'listarSetor'%}">
               <i class="fa fa-arrow-circle-right"></i> Setor
+            </a>
+          </li>
+            <li class="nav-item ">
+            <a class="nav-link all-nav-item regra" href="{% url 'listarTipoCaixa'%}">
+              <i class="fa fa-arrow-circle-right"></i> Regra
             </a>
           </li>
         </ul>

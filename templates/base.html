@@ -17,6 +17,8 @@
 
   <!-- CSS Files -->
   <link href="{% static 'assets/css/argon-dashboard.css' %}" rel="stylesheet" />
+
+    <link href="{% static 'assets/js/plugins/chousen/chosen.min.css' %}" rel="stylesheet" />
 </head>
 
 <body class="">
@@ -95,6 +97,8 @@
   <script src="{% static 'assets/js/argon-dashboard.min.js' %}"></script>
   <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
     <script src="https://kit.fontawesome.com/b4562a09a3.js" crossorigin="anonymous"></script>
+    <script src="{% static 'assets/js/plugins/chousen/chosen.jquery.min.js' %}"></script>
+
   <script>
     window.TrackJS &&
       TrackJS.install({
@@ -104,6 +108,13 @@
   </script>
     <script src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/quagga.min.js' %}"></script>
+
+    <script>
+        $(document).ready( () => {
+           $(".select-search").chosen();
+        });
+
+    </script>
     {% block js %}
     
     {% endblock %}

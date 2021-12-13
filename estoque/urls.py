@@ -30,5 +30,17 @@ urlpatterns = [
     path('palet/atualizar/<int:id>', atualizarPalet, name='atualizarPalet'),
     path('palet/deletar/<int:id>', deletarPalet, name='deletarPalet'),
 
-    path('caixa/saida/<int:id>', caixaSaida, name='saidaCaixa')
+    path('caixa/saida/<int:id>', caixaSaida, name='saidaCaixa'),
+
+    path('setor/localizacao/<int:id>', setorLocalizacaoList, name='localizacoesSetor'),
+    path('setor/localizacao/<int:id>/gerar', criarSetorLocalizacao, name='criarSetorLocalizacao'),
+
+    path('regra', listTipoCaixa, name='listarTipoCaixa'),
+    path('regra/criar', criarTipoCaixa, name='criarTipoCaixa'),
+    path('regra/atualizar/<int:id>', atualizarTipoCaixa, name='atualizarTipoCaixa'),
+    path('regra/deletar/<int:id>', deletarTipoCaixa, name='deletarTipoCaixa'),
+
+    path('movimentacao/entrada', entradaPaletSetor, name='entradaPaletSetor'),
+    path('movimentacao', listaMovimentacao, name='listarPaletsArmazenados')
+
 ]

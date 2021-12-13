@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block header %}
+        <div class="header-body text-center mb-3">
+          <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+                <img src="{% static 'assets/img/brand/logo.png' %}" width="200px">
+              <h1 class="text-white">Bom Leite <br> Sistema de Gestão de Estoque</h1>
+            </div>
+          </div>
+        </div>
+    {% endblock %}
+
+{% block main %}
+    <div class="row mt-5 ">
+            <div class="col-11 ml-3 mb-2" onclick="location.href='/setor';">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                    <div class="row">
+                            <div class="col">
+                              <span class="h2 font-weight-bold mb-0">Setores</span>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                      </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-11 ml-3 mb-2" onclick="location.href='/palet';">
+          <div class="card card-stats mb-4 mb-xl-0">
+                           <div class="card-body">
+                    <div class="row">
+                            <div class="col">
+                              <span class="h2 font-weight-bold mb-0">Palets</span>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                      </div>
+                </div>
+          </div>
+        </div>
+        <div class="col-11 ml-3 mb-2" onclick="location.href='/caixa';">
+          <div class="card card-stats mb-4 mb-xl-0">
+                            <div class="card-body">
+                    <div class="row">
+                            <div class="col">
+                              <span class="h2 font-weight-bold mb-0">Caixas</span>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                      </div>
+                </div>
+          </div>
+        </div>
+            <div class="col-11 ml-3 mb-2" onclick="location.href='/produto';">
+              <div class="card card-stats mb-4 mb-xl-0 ">
+                <div class="card-body">
+                    <div class="row">
+                            <div class="col">
+                                <a><span class="h2 font-weight-bold mb-0">Produtos</span></a>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                      </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-11 ml-3 mb-2" onclick="location.href='/armazem';">
+          <div class="card card-stats mb-4 mb-xl-0">
+                           <div class="card-body">
+                    <div class="row">
+                            <div class="col">
+                              <span class="h2 font-weight-bold mb-0">Armazéns</span>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                      </div>
+                </div>
+          </div>
+        </div>
+
+        <div class="col-11 ml-3 mb-2" onclick="location.href='/regra';">
+          <div class="card card-stats mb-4 mb-xl-0">
+                           <div class="card-body">
+                    <div class="row">
+                            <div class="col">
+                              <span class="h2 font-weight-bold mb-0">Regras</span>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                      </div>
+                </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}

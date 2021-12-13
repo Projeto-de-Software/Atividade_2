@@ -6,8 +6,8 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Produto</h3>
-                    <a class="btn btn-primary float-right" href="{% url 'criarProduto' %}"><i class="fa fa-plus-circle"></i> Novo Produto</a>
+                  <h3 class="mb-0"> Setor - {{ setor.nomeSetor }}</h3>
+                    <a class="btn btn-primary float-right" href="{% url 'criarSetorLocalizacao' id=setor.id %}"><i class="fa fa-plus-circle"></i> Gerar Localização</a>
                 </div>
               </div>
             </div>
@@ -16,25 +16,25 @@
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Opções</th>
+                    <th scope="col">Secção</th>
+                    <th scope="col">Plateleira</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for element in list %}
                       <tr>
-                        <th scope="row">
-                            {{ element.nome }}
-                        </th>
                         <td>
-                            <div>
-                                  <a class="btn btn-warning float-left" href="{% url 'atualizarProduto' id=element.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
-                                <a class="btn btn-danger float-left deletar" url="{% url 'deletarProduto' id=element.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
-                            </div>
+                            {{ element.coluna }}
+                        </td>
+                          <td>
+                            {{ element.linha }}
+                        </td>
+                          <td>
+                            None
                         </td>
                       </tr>
                   {% endfor %}
-
                 </tbody>
               </table>
             </div>

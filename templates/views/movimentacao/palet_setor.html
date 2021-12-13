@@ -1,10 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "views/forms.html" %}
+{% load bootstrap %}
 
-</body>
-</html>
+
+{% block title_page %}
+    <h3 class="mb-0">Armazenar Palet</h3>
+{% endblock title_page %}
+
+{% block form_body %}
+    <form method="post" action="{% url 'entradaPaletSetor' %}">
+        {% csrf_token %}
+        {{form | bootstrap}}
+        <button class="btn btn-primary float-right" type="submit">Salvar</button>
+    </form>
+{% endblock form_body %}
+
+{% block js %}
+    <script>
+        let palets = JSON.parse('{{ palets | safe }}');
+        let setores = JSON.parse('{{ setores | safe }}');
+        let setoresLocalizacao = JSON.parse('{{ setoresLocalizacao | safe }}');
+
+        $(document).ready((e) => {
+            popularPalets();
+            popularSetores();
+
+            $(".select-setor").change((e) => {
+                if ($(".select-setor").val() != ""){
+                    popularLocalizacoes($(".select-setor").val());
+                } else {
+                    alert("Por favor selecione um setor válido.");
+                }
+
+            });
+        });
+
+        function popularPalets(){
+            let selectPalet = $('.select-palet');
+
+            $(selectPalet).append(`<option value="">Selecione um Palet</option>`)
+            palets.forEach((elemet) => {
+                $(selectPalet).append(`<option value="${elemet.pk}">${elemet.fields.codigoBarras}</option>`)
+            });
+            $(selectPalet).chosen();
+        }
+
+        function popularSetores(){
+            let selectSetor = $('.select-setor');
+            $(selectSetor).append(`<option value="">Selecione um Setor</option>`)
+            setores.forEach((elemet) => {
+                $(selectSetor).append(`<option value="${elemet.pk}">${elemet.fields.nomeSetor}</option>`)
+            });
+
+            $(selectSetor).chosen();
+        }
+
+        function popularLocalizacoes(idSetor){
+            let localizacoesFiltradas = setoresLocalizacao.filter((x) => {
+                return x.fields.setor == idSetor
+            });
+
+            let selectLocalizacao = $(".select-setor-localizacao");
+            $(selectLocalizacao).empty();
+            $(selectLocalizacao).trigger("chosen:updated");
+
+            localizacoesFiltradas.forEach((element) => {
+                $(selectLocalizacao).append(`<option value="${element.pk}">Secção - ${element.fields.coluna} | Prateleira - ${element.fields.linha}</option>`)
+            });
+
+            $(selectLocalizacao).chosen();
+            $(selectLocalizacao).trigger("chosen:updated");
+
+        }
+    </script>
+
+{% endblock js %}

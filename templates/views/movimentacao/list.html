@@ -6,8 +6,8 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Setor</h3>
-                    <a class="btn btn-primary float-right" href="{% url 'criarSetor' %}"><i class="fa fa-plus-circle"></i> Novo Setor</a>
+                  <h3 class="mb-0">Palets Armazenados</h3>
+                    <a class="btn btn-primary float-right" href="{% url 'entradaPaletSetor' %}"><i class="fa fa-plus-circle"></i> Armazenar Palet</a>
                 </div>
               </div>
             </div>
@@ -17,6 +17,7 @@
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">Nome</th>
+                      <th scope="col">Data de Alocação</th>
                     <th scope="col">Opções</th>
                   </tr>
                 </thead>
@@ -24,18 +25,18 @@
                   {% for element in list %}
                       <tr>
                         <th scope="row">
-                            {{ element.nomeSetor }}
+                            {{ element.palet.codigoBarras }}
                         </th>
+                          <td>
+                                {{ element.dataInicoAlocacao }}
+                          </td>
                         <td>
-                            <div>
-                                <a class="btn btn-info float-left" href="{% url 'localizacoesSetor' id=element.id  %}"><i class="fa fa-map fa-lg text-white"></i></a>
-                                <a class="btn btn-warning float-left" href="{% url 'atualizarSetor' id=element.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
-                                <a class="btn btn-danger float-left deletar" url="{% url 'deletarSetor' id=element.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                           <div>
+                                <a class="btn btn-warning float-left " href=""><i class="fa fa-sign-out fa-1x text-white"></i></a>
                             </div>
                         </td>
                       </tr>
                   {% endfor %}
-
                 </tbody>
               </table>
             </div>
