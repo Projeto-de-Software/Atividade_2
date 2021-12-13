@@ -3,7 +3,7 @@ from django.utils import timezone
 
 # Create your models here.
 class Produto (models.Model):
-    nome = models.CharField(max_length=20, blank=False, null=False, unique=False)
+    nome = models.CharField(max_length=120, blank=False, null=False, unique=False)
     codigoBarras = models.CharField(max_length=20, blank=False, null=False, unique=True)
 
     def __str__(self):
