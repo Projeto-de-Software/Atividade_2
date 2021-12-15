@@ -255,10 +255,10 @@ class SaidaPaletSetorForm(forms.Form):
 class EntradaPalet(ModelForm):
     class Meta:
         model = SuperPalet
-        fields = ('codigoBarras', 'quantidadeItens', 'produto', 'tipoEmbalagem', 'paleteria')
+        fields = ('codigoBarras', 'produto', 'tipoEmbalagem' ,'quantidadeItens' , 'paleteria')
         labels = {
-            'codigoBarras': ('Código de Barras:'),
-            'quantidadeItens': ('Quantidade de Itens:'),
+            'codigoBarras': ('Pallet:'),
+            'quantidadeItens': ('Quantidade de Caixas:'),
             'produto': ('Produto:'),
             'tipoEmbalagem': ('Embalagem:'),
             'paleteria': ('Paleteria:'),
@@ -267,24 +267,24 @@ class EntradaPalet(ModelForm):
         error_messages = {
             'codigoBarras': {
                 'max_length': ("O código digitado é muito longo"),
-                'blank': ('Não é possível armazenar um palet sem um código de barras'),
-                'null': ('Não é possível armazenar um palet sem um código de barras')
+                'blank': ('Não é possível armazenar um pallet sem um código de barras'),
+                'null': ('Não é possível armazenar um pallet sem um código de barras')
             },
             'quantidadeItens': {
-                'blank': ('Não é possível armazenar um palet sem a quantidade de caixas'),
-                'null': ('Não é possível armazenar um palet sem a quantidade de caixas')
+                'blank': ('Não é possível armazenar um pallet sem a quantidade de caixas'),
+                'null': ('Não é possível armazenar um pallet sem a quantidade de caixas')
             },
             'produto': {
-                'blank': ('Não é possível armazenar um palet sem informar o produto'),
-                'null': ('Não é possível armazenar um palet sem informar o produto')
+                'blank': ('Não é possível armazenar um pallet sem informar o produto'),
+                'null': ('Não é possível armazenar um pallet sem informar o produto')
             },
             'tipoEmbalagem': {
-                'blank': ('Não é possível armazenar um palet sem informar o tipo de embalagem'),
-                'null': ('NNão é possível armazenar um palet sem informar o tipo de embalagem')
+                'blank': ('Não é possível armazenar um pallet sem informar o tipo de embalagem'),
+                'null': ('NNão é possível armazenar um pallet sem informar o tipo de embalagem')
             },
             'paleteria': {
-                'blank': ('Não é possível armazenar um palet sem informar a paleteira'),
-                'null': ('Não é possível armazenar um palet sem informar a paleteira')
+                'blank': ('Não é possível armazenar um pallet sem informar a paleteira'),
+                'null': ('Não é possível armazenar um pallet sem informar a paleteira')
             },
         }
         widgets = {
@@ -296,8 +296,8 @@ class SaidaPalet(ModelForm):
         model = SuperPalet
         fields = ('codigoBarras', 'quantidadeItens', 'produto', 'tipoEmbalagem', 'paleteria', 'dataArmazenamento')
         labels = {
-            'codigoBarras': ('Código de Barras:'),
-            'quantidadeItens': ('Quantidade de Itens:'),
+            'codigoBarras': ('Pallet:'),
+            'quantidadeItens': ('Quantidade de Caixas:'),
             'produto': ('Produto:'),
             'tipoEmbalagem': ('Embalagem:'),
             'paleteria': ('Paleteria:'),
@@ -307,28 +307,28 @@ class SaidaPalet(ModelForm):
         error_messages = {
             'codigoBarras': {
                 'max_length': ("O código digitado é muito longo"),
-                'blank': ('Não é possível armazenar um palet sem um código de barras'),
-                'null': ('Não é possível armazenar um palet sem um código de barras')
+                'blank': ('Não é possível armazenar um pallet sem um código de barras'),
+                'null': ('Não é possível armazenar um pallet sem um código de barras')
             },
             'quantidadeItens': {
-                'blank': ('Não é possível armazenar um palet sem a quantidade de caixas'),
-                'null': ('Não é possível armazenar um palet sem a quantidade de caixas')
+                'blank': ('Não é possível armazenar um pallet sem a quantidade de caixas'),
+                'null': ('Não é possível armazenar um pallet sem a quantidade de caixas')
             },
             'produto': {
-                'blank': ('Não é possível armazenar um palet sem informar o produto'),
-                'null': ('Não é possível armazenar um palet sem informar o produto')
+                'blank': ('Não é possível armazenar um pallet sem informar o produto'),
+                'null': ('Não é possível armazenar um pallet sem informar o produto')
             },
             'tipoEmbalagem': {
-                'blank': ('Não é possível armazenar um palet sem informar o tipo de embalagem'),
+                'blank': ('Não é possível armazenar um pallet sem informar o tipo de embalagem'),
                 'null': ('NNão é possível armazenar um palet sem informar o tipo de embalagem')
             },
             'paleteria': {
-                'blank': ('Não é possível armazenar um palet sem informar a paleteira'),
-                'null': ('Não é possível armazenar um palet sem informar a paleteira')
+                'blank': ('Não é possível armazenar um pallet sem informar a paleteira'),
+                'null': ('Não é possível armazenar um pallet sem informar a paleteira')
             },
             'dataArmazenamento': {
-                'blank': ('Não é possível armazenar um palet sem informar a paleteira'),
-                'null': ('Não é possível armazenar um palet sem informar a paleteira')
+                'blank': ('Não é possível armazenar um pallet sem informar a paleteira'),
+                'null': ('Não é possível armazenar um pallet sem informar a paleteira')
             }
         }
         widgets = {
