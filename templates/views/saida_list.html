@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Lista de Palets </h3>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Código de Barras</th>
+                    <th scope="col">Data de Armazenamento</th>
+                    <th scope="col">Paleteira</th>
+                    <th scope="col">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for element in list %}
+                      <tr>
+                        <th scope="row">
+                            {{ element.codigoBarras }}
+                        </th>
+                          <td>{{ element.dataArmazenamento }}</td>
+                          <td>{{ element.paleteria }}</td>
+                        <td>
+                            <div>
+                                  <a class="btn btn-warning float-left" href="{% url 'saidaPalet' id=element.id %}"><i class="fa fa-arrow-alt-circle-right fa-1x text-white"></i></a>
+                            </div>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

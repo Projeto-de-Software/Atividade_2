@@ -64,6 +64,10 @@ class ProdutoForm(ModelForm):
         fields = '__all__'
         labels = {
             'nome' : ('Nome:'),
+            'codigoInterno' : ('Código'),
+            'embalagem' : ('Embalagem'),
+            'codigoBarras' : ('Código de Barras'),
+            'quantidadeCaixa' : ('Quantidade por Caixa')
         }
         #help_texts = {'title': ('Digite o título do projeto'),}
         error_messages = {
@@ -154,7 +158,6 @@ class SetorForm(ModelForm):
             'armazem': forms.Select(attrs={'class':'form-control select-search'})
         }
 
-
 class CaixaSaidaForm(ModelForm):
     class Meta:
         model = Caixa
@@ -199,7 +202,6 @@ class CaixaSaidaForm(ModelForm):
             'palet': forms.Select(attrs={'disabled': True}),
         }
 
-
 class SetorLocalizacaoForm(ModelForm):
     class Meta:
         model = SetorLocalizacao
@@ -234,13 +236,11 @@ class TipoCaixaForm(ModelForm):
             'produto': ('Produto:')
         }
 
-
 class EntradaPaletSetorForm(forms.Form):
     palet = forms.ChoiceField(label='Palet: ', choices=(), widget=forms.Select(attrs={'class':'select-palet'}))
     setor = forms.ChoiceField(label='Setor: ', choices=(), widget=forms.Select(attrs={'class':'select-setor'}))
     setorLocalizacao = forms.ChoiceField(label='Localizacão: ', choices=(), widget=forms.Select(attrs={'class':'select-setor-localizacao'}))
     dataInicoAlocacao = forms.DateField(label="Data Alocação" ,widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control','type': 'date'}))
-
 
 class SaidaPaletSetorForm(forms.Form):
     palet = forms.ChoiceField(label='Palet: ', choices=(), widget=forms.Select(attrs={'class': 'select-palet'}))
@@ -250,3 +250,88 @@ class SaidaPaletSetorForm(forms.Form):
     dataInicoAlocacao = forms.DateField(label="Data Alocação", widget=forms.DateInput(format=('%Y-%m-%d'),
                                                                                       attrs={'class': 'form-control',
                                                                                              'type': 'date'}))
+
+
+class EntradaPalet(ModelForm):
+    class Meta:
+        model = SuperPalet
+        fields = ('codigoBarras', 'quantidadeItens', 'produto', 'tipoEmbalagem', 'paleteria')
+        labels = {
+            'codigoBarras': ('Código de Barras:'),
+            'quantidadeItens': ('Quantidade de Itens:'),
+            'produto': ('Produto:'),
+            'tipoEmbalagem': ('Embalagem:'),
+            'paleteria': ('Paleteria:'),
+        }
+        # help_texts = {'title': ('Digite o título do projeto'),}
+        error_messages = {
+            'codigoBarras': {
+                'max_length': ("O código digitado é muito longo"),
+                'blank': ('Não é possível armazenar um palet sem um código de barras'),
+                'null': ('Não é possível armazenar um palet sem um código de barras')
+            },
+            'quantidadeItens': {
+                'blank': ('Não é possível armazenar um palet sem a quantidade de caixas'),
+                'null': ('Não é possível armazenar um palet sem a quantidade de caixas')
+            },
+            'produto': {
+                'blank': ('Não é possível armazenar um palet sem informar o produto'),
+                'null': ('Não é possível armazenar um palet sem informar o produto')
+            },
+            'tipoEmbalagem': {
+                'blank': ('Não é possível armazenar um palet sem informar o tipo de embalagem'),
+                'null': ('NNão é possível armazenar um palet sem informar o tipo de embalagem')
+            },
+            'paleteria': {
+                'blank': ('Não é possível armazenar um palet sem informar a paleteira'),
+                'null': ('Não é possível armazenar um palet sem informar a paleteira')
+            },
+        }
+        widgets = {
+            'produto' : forms.Select(attrs={'class': 'form-control select-search'}),
+        }
+
+class SaidaPalet(ModelForm):
+    class Meta:
+        model = SuperPalet
+        fields = ('codigoBarras', 'quantidadeItens', 'produto', 'tipoEmbalagem', 'paleteria', 'dataArmazenamento')
+        labels = {
+            'codigoBarras': ('Código de Barras:'),
+            'quantidadeItens': ('Quantidade de Itens:'),
+            'produto': ('Produto:'),
+            'tipoEmbalagem': ('Embalagem:'),
+            'paleteria': ('Paleteria:'),
+            'dataArmazenamento': ('Data de Fabricação')
+        }
+        # help_texts = {'title': ('Digite o título do projeto'),}
+        error_messages = {
+            'codigoBarras': {
+                'max_length': ("O código digitado é muito longo"),
+                'blank': ('Não é possível armazenar um palet sem um código de barras'),
+                'null': ('Não é possível armazenar um palet sem um código de barras')
+            },
+            'quantidadeItens': {
+                'blank': ('Não é possível armazenar um palet sem a quantidade de caixas'),
+                'null': ('Não é possível armazenar um palet sem a quantidade de caixas')
+            },
+            'produto': {
+                'blank': ('Não é possível armazenar um palet sem informar o produto'),
+                'null': ('Não é possível armazenar um palet sem informar o produto')
+            },
+            'tipoEmbalagem': {
+                'blank': ('Não é possível armazenar um palet sem informar o tipo de embalagem'),
+                'null': ('NNão é possível armazenar um palet sem informar o tipo de embalagem')
+            },
+            'paleteria': {
+                'blank': ('Não é possível armazenar um palet sem informar a paleteira'),
+                'null': ('Não é possível armazenar um palet sem informar a paleteira')
+            },
+            'dataArmazenamento': {
+                'blank': ('Não é possível armazenar um palet sem informar a paleteira'),
+                'null': ('Não é possível armazenar um palet sem informar a paleteira')
+            }
+        }
+        widgets = {
+            'produto' : forms.Select(attrs={'class': 'form-control select-search'}),
+            'dataArmazenamento': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control','type': 'date'})
+        }

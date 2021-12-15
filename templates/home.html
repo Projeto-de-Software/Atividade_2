@@ -1,103 +1,34 @@
-{% extends 'base.html' %}
+{% extends "views/forms.html" %}
 {% load static %}
+{% load bootstrap %}
 
     {% block header %}
         <div class="header-body text-center mb-3">
           <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
-                <img src="{% static 'assets/img/brand/logo.png' %}" width="200px">
+                <img src="{% static 'assets/img/brand/logo.png' %}" width="100px">
               <h1 class="text-white">Bom Leite <br> Sistema de Gestão de Estoque</h1>
             </div>
           </div>
         </div>
     {% endblock %}
 
-{% block main %}
-    <div class="row mt-5 ">
-            <div class="col-11 ml-3 mb-2" onclick="location.href='/setor';">
-              <div class="card card-stats mb-4 mb-xl-0">
-                <div class="card-body">
-                    <div class="row">
-                            <div class="col">
-                              <span class="h2 font-weight-bold mb-0">Setores</span>
-                            </div>
-                            <div class="col-auto">
 
-                            </div>
-                      </div>
-                </div>
-              </div>
-            </div>
-        <div class="col-11 ml-3 mb-2" onclick="location.href='/palet';">
-          <div class="card card-stats mb-4 mb-xl-0">
-                           <div class="card-body">
-                    <div class="row">
-                            <div class="col">
-                              <span class="h2 font-weight-bold mb-0">Palets</span>
-                            </div>
-                            <div class="col-auto">
 
-                            </div>
-                      </div>
-                </div>
-          </div>
-        </div>
-        <div class="col-11 ml-3 mb-2" onclick="location.href='/caixa';">
-          <div class="card card-stats mb-4 mb-xl-0">
-                            <div class="card-body">
-                    <div class="row">
-                            <div class="col">
-                              <span class="h2 font-weight-bold mb-0">Caixas</span>
-                            </div>
-                            <div class="col-auto">
 
-                            </div>
-                      </div>
-                </div>
-          </div>
-        </div>
-            <div class="col-11 ml-3 mb-2" onclick="location.href='/produto';">
-              <div class="card card-stats mb-4 mb-xl-0 ">
-                <div class="card-body">
-                    <div class="row">
-                            <div class="col">
-                                <a><span class="h2 font-weight-bold mb-0">Produtos</span></a>
-                            </div>
-                            <div class="col-auto">
+{% block title_page %}
+    <h3 class="mb-0">Entrada de Palet</h3>
+    <a class="btn btn-primary float-right" href="{% url 'saidaPaletList' %}"><i class="fa fa-arrow-circle-o-right"></i> Saída</a>
+{% endblock title_page %}
 
-                            </div>
-                      </div>
-                </div>
-              </div>
-            </div>
-        <div class="col-11 ml-3 mb-2" onclick="location.href='/armazem';">
-          <div class="card card-stats mb-4 mb-xl-0">
-                           <div class="card-body">
-                    <div class="row">
-                            <div class="col">
-                              <span class="h2 font-weight-bold mb-0">Armazéns</span>
-                            </div>
-                            <div class="col-auto">
+{% block form_body %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+    {% endfor %}
+    <form method="post" id="form" action="{% url 'home' %}">
+        {% csrf_token %}
+        {{form | bootstrap}}
+        <button class="btn btn-primary float-right" type="submit">Salvar</button>
+    </form>
+{% endblock form_body %}
 
-                            </div>
-                      </div>
-                </div>
-          </div>
-        </div>
-
-        <div class="col-11 ml-3 mb-2" onclick="location.href='/regra';">
-          <div class="card card-stats mb-4 mb-xl-0">
-                           <div class="card-body">
-                    <div class="row">
-                            <div class="col">
-                              <span class="h2 font-weight-bold mb-0">Regras</span>
-                            </div>
-                            <div class="col-auto">
-
-                            </div>
-                      </div>
-                </div>
-          </div>
-        </div>
-    </div>
-{% endblock %}

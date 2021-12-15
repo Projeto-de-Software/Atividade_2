@@ -1,0 +1,15 @@
+{% extends "views/forms.html" %}
+{% load bootstrap %}
+
+
+{% block title_page %}
+    <h3 class="mb-0">Palet - {{ nome }}</h3>
+{% endblock title_page %}
+
+{% block form_body %}
+    <form method="post" action="{% url 'saidaPalet' id=id%}">
+        {% csrf_token %}
+        {{form | bootstrap}}
+        <button class="btn btn-primary float-right" type="submit">Salvar</button>
+    </form>
+{% endblock form_body %}

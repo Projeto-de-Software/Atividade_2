@@ -41,6 +41,9 @@ urlpatterns = [
     path('regra/deletar/<int:id>', deletarTipoCaixa, name='deletarTipoCaixa'),
 
     path('movimentacao/entrada', entradaPaletSetor, name='entradaPaletSetor'),
-    path('movimentacao', listaMovimentacao, name='listarPaletsArmazenados')
+    path('movimentacao', listaMovimentacao, name='listarPaletsArmazenados'),
+
+    path('saida', saidaPaletList, name='saidaPaletList'),
+    path('saida/<int:id>', saidaPalet, name='saidaPalet')
 
 ]

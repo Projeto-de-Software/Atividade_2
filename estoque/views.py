@@ -6,11 +6,70 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 from .forms import *
 from django.core import serializers
+from django.contrib import messages
 import datetime
 
 # Create your views here.
 def home (request):
-    return render(request,'home.html')
+    form = EntradaPalet(request.POST or None)
+
+    if(request.method == 'POST'):
+        if(form.is_valid()):
+            form.save()
+            messages.success(request, "Cadastro realizado com sucesso.")
+        else:
+            messages.error(request, "Não foi possível realizar o cadastro")
+    form = EntradaPalet()
+    data = {
+        'form': form,
+    }
+    return render(request, 'home.html', data)
+
+def saidaPaletList(request):
+    list = []
+    try:
+        list = SuperPalet.objects.all().filter(dataRetirada=None).order_by('dataArmazenamento')
+    except Exception as e:
+        list = []
+
+    data = {
+        'list': list
+    }
+    return render(request, 'views/saida_list.html', data)
+
+def saidaPalet(request, id):
+    data ={}
+    objectElemet = SuperPalet.objects.get(id=id)
+    form = SaidaPalet(request.POST or None, instance=objectElemet)
+    data = {
+        'nome': objectElemet.codigoBarras,
+        'id': objectElemet.id,
+        'form':form
+    }
+
+    if (request.method == 'POST'):
+        if (form.is_valid()):
+            form.save()
+            request.method = "GET"
+            messages.success(request, "Palet retirado com sucesso.")
+
+            list = []
+            try:
+                list = SuperPalet.objects.all().filter(dataRetirada=None).order_by('dataArmazenamento')
+            except Exception as e:
+                list = []
+
+            data = {
+                'list': list
+            }
+            return render(request, 'views/saida_list.html', data)
+
+        else:
+            messages.error(request, "Palet problemas para retirar o palet, tente mais tarde.")
+            return render(request, 'views/saida_palet.html', data)
+    else:
+        return render(request, 'views/saida_palet.html', data)
+
 
 def armazemCriar(request):
     form = ArmazenForm(request.POST or None)
@@ -402,4 +461,4 @@ def listaMovimentacao(request):
     return render(request, 'views/movimentacao/list.html', data)
 
 def saidaPaletSetor(request):
-    return  True
+    return
