@@ -7,7 +7,7 @@ from .models import *
 from .forms import *
 from django.core import serializers
 from django.contrib import messages
-import datetime
+from django.utils.timezone import now
 
 # Create your views here.
 def home (request):
@@ -50,7 +50,9 @@ def saidaPalet(request, id):
     if (request.method == 'POST'):
         if (form.is_valid()):
             form.save()
-            request.method = "GET"
+            objectElemet.dataRetirada = now()
+            objectElemet.save()
+
             messages.success(request, "Palet retirado com sucesso.")
 
             list = []

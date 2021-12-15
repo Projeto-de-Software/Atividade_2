@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block main %}
     <div class="col-12">
         <div class="card shadow">
@@ -9,6 +10,9 @@
                   <h3 class="mb-0">Lista de Palets </h3>
                 </div>
               </div>
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+            {% endfor %}
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
