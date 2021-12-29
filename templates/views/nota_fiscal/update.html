@@ -1,0 +1,127 @@
+{% extends "views/forms.html" %}
+{% load bootstrap %}
+
+
+{% block title_page %}
+    <h3 class="mb-0">Nota Fiscal</h3>
+{% endblock title_page %}
+
+{% block form_body %}
+    <form method="post" action="{% url 'criarNotaFisca' %}" id="form-nota-fiscal" >
+        {% csrf_token %}
+        {{form | bootstrap}}
+        <div class="form-group">
+            <input type="button" id="btn-add-produto" class="btn btn-primary float-right" value="Adicionar Produto">
+        </div>
+        <div class="form-group">
+            <div class="table-responsive mt-3 mb-3">
+              <table class="table align-items-center table-flush mt-4 mb-3">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Remover</th>
+                  </tr>
+                </thead>
+                <tbody class="table-produtos">
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+        <input type="button" class="btn btn-primary float-right" onclick="formSubimit()" value="Salvar">
+        <a type="button" class="btn btn-primary float-right mr-3" href="">Voltar</a>
+    </form>
+
+{% endblock form_body %}
+{% block js %}
+    <script>
+        let produtos_quantidades = [];
+
+        function formSubimit(){
+            debugger;
+            let data = $("#form-nota-fiscal").serializeArray();
+
+            var config = {};
+            data.map(function(item) {
+                if ( config[item.name] ) {
+                    if ( typeof(config[item.name]) === "string" ) {
+                        config[item.name] = [config[item.name]];
+                    }
+                    config[item.name].push(item.value);
+                } else {
+                    config[item.name] = item.value;
+                }
+            });
+
+            config['produtos'] = JSON.stringify(produtos_quantidades);
+
+            $.post('{% url 'criarNotaFisca' %}', config, (success) => {
+                alert(success.message);
+            },'json').catch(err => {
+                alert('Erro ao realizar o cadastro.');
+                console.log(err);
+            })
+        }
+
+        function remover_produto(idProduto){
+            $('.tr-prod-'+idProduto).remove();
+            produtos_quantidades.splice(produtos_quantidades.indexOf((element) => element.produto_id == idProduto), 1);
+        }
+
+        $(document).ready(() => {
+            let divDataCriacao = $("#id_dataCriacao").parent().parent();
+            $(divDataCriacao).append('<div><h3 class="mt-5">Produtos</h3></div>');
+            $(divDataCriacao).append("");
+
+            let produtos = JSON.parse('{{ produtos | safe }}');
+
+            let select_produtos = $('.select-produto');
+            produtos.forEach((elemet) => {
+                $(select_produtos).append(`<option value="${elemet.pk}">${elemet.fields.codigoBarras} - ${elemet.fields.nome}</option>`)
+            });
+
+            $(select_produtos).chosen();
+
+            $('#btn-add-produto').click(() => {
+                let produto = $('#id_produto');
+                let quantidade = $('#id_quantidade');
+
+                let adicionar = true;
+
+                produtos_quantidades.forEach(element => {
+                   if(element.produto_id == $(produto).val()){
+                       adicionar = false;
+                   }
+                });
+
+                if (adicionar){
+                    produtos_quantidades.push({
+                       produto_id: $(produto).val(),
+                       quantidade: $(quantidade).val()
+                    });
+
+                    let tr = '';
+                    tr += '<tr class="tr-prod-'+$(produto).val()+'">';
+                        tr += '<td>';
+                            tr += $('#id_produto option:selected').text();
+                        tr += '</td>';
+                        tr += '<td>';
+                            tr += $(quantidade).val();
+                        tr += '</td>';
+                        tr += '<td>';
+                            tr += '<input type="button" class="btn btn-danger float-left" onclick="remover_produto('+$(produto).val()+')" value="Remover">';
+                        tr += '</td>';
+                    tr += '</tr>';
+
+                    $('.table-produtos').append(tr);
+                    return true;
+                }else {
+                    alert("Produto já adicionado.");
+                    return false;
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

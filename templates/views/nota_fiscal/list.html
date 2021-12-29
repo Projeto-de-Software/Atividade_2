@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Lista de Notas Fiscais </h3>
+                  <a class="btn btn-primary float-right" href="{% url 'criarNotaFisca' %}"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nova Nota Fiscal</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Número da Nota Fiscal</th>
+                    <th scope="col">Data de Criação</th>
+                    <th scope="col">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for element in list %}
+                      <tr {% if element.status == 'ABERTA' %} class="bg-gradient-warning" {% endif %} {% if element.status == 'FECHADA'%} class="bg-gradient-green" {% endif %} {% if element.status == 'CONFERIDA'%} class="bg-gradient-blue" {% endif %}>
+                        <th scope="row">
+
+
+                            {{ element.numero }}
+                        </th>
+                          <td>{{ element.dataCriacao }}</td>
+                        <td>
+                            <div>
+                                  <a class="btn btn-info float-left mt-2" href="{% url 'checkProdutosNotaFiscal' id=element.id %}"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                  <a class="btn btn-primary float-left mt-2"  {% if element.status != 'ABERTA'%} disabled="disabled" {% endif %}   href="{% url 'saidaPalet' id=element.id %}"><i class="fa fa-pen fa-1x text-white"></i></a>
+                            </div>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

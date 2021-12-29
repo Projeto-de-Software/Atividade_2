@@ -11,6 +11,12 @@ TIPO_EMBALAGEM = (
     ('QUILOGRAMA','QUILOGRAMA'),
 )
 
+STATUS = (
+    ('ABERTA', 'ABERTA'),
+    ('CONFERIDA', 'CONFERIDA'),
+    ('FINALIZADA','FINALIZADA'),
+)
+
 class Produto (models.Model):
     codigoInterno = models.IntegerField(null=False, blank=False, default=0)
     nome = models.CharField(max_length=120, blank=False, null=False, unique=False)
@@ -18,79 +24,15 @@ class Produto (models.Model):
     codigoBarras = models.CharField(max_length=20, blank=False, null=False, unique=True)
     quantidadeCaixa = models.IntegerField(null=False, blank=False, default=1)
 
+
     def __str__(self):
         return str(self.codigoBarras) + " - " + str(self.nome)
 
 
-TIPO = (
-    ('C','Caixa'),
-    ('P', 'Palet'),
-)
-
 TIPO_CAIXA = (
-    ('PA', 'Papelão'),
-    ('PL', 'Plástico')
+    ('PA', 'PAPELÃO'),
+    ('PL', 'PLÁSTICO')
 )
-
-class TipoCaixa(models.Model):
-    tipo = models.CharField(max_length=2, choices=TIPO, default='C', blank=False, null=False)
-    tipoCaixa = models.CharField(max_length=2, choices=TIPO_CAIXA, default='PA' ,blank=False, null=False)
-    quantidadeProdutosTipoCaixa = models.IntegerField(blank=False, null=False)
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str("Caixa" if self.tipo == "C" else "Palet") + " - " + str("Papelão" if self.tipoCaixa == "PA" else "Plástico") + " - " + str(self.quantidadeProdutosTipoCaixa) + " - " + str(self.produto.nome)
-
-class Palet(models.Model):
-    codigoBarras = models.CharField(max_length=20, blank=False, null=False, unique=True)
-    dataCriacao = models.DateField(null=False, blank=False, default=timezone.now)
-    ativo = models.BooleanField(null=False, blank=False, default=True)
-    quantidadeItens = models.IntegerField(blank=False, null=False, default=1)
-    tipoCaixa = models.ForeignKey(TipoCaixa, on_delete=models.CASCADE)
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.codigoBarras)
-
-
-class Caixa (models.Model):
-    codigoBarras = models.CharField(max_length=20, blank=False, null=False, unique=True)
-    dataFabricacao = models.DateField(null=False, blank=False, default=timezone.now)
-    dataSaide = models.DateField(null=True, blank=True)
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    palet = models.ForeignKey(Palet, on_delete=models.CASCADE)
-    tipoCaixa = models.ForeignKey(TipoCaixa, on_delete=models.CASCADE)
-    quantidadeProdutosCaixa = models.IntegerField(blank=False, null=False)
-
-    def __str__(self):
-        return str(self.codigoBarras)
-
-class Armazem(models.Model):
-    nomeArmazem = models.CharField(max_length=50, null=False, blank=False)
-
-    def __str__(self):
-        return str(self.nomeArmazem)
-
-class Setor(models.Model):
-    nomeSetor = models.CharField(max_length=50, null=False, blank=False)
-    codigoBarras = models.CharField(max_length=20, blank=False, null=False, unique=True)
-    dataCriacao = models.DateField(null=False, blank=False, default=timezone.now)
-    ativo = models.BooleanField(blank=False, default=True)
-    armazem = models.ForeignKey(Armazem, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.nomeSetor)
-
-class SetorLocalizacao(models.Model):
-    coluna = models.IntegerField(null=False, blank=False)
-    linha = models.IntegerField(null=False, blank=False)
-    setor = models.ForeignKey(Setor, on_delete=models.CASCADE)
-
-class PaletSetor(models.Model):
-    palet = models.ForeignKey(Palet, on_delete=models.CASCADE)
-    setorLocalizacao = models.ForeignKey(SetorLocalizacao, on_delete=models.CASCADE)
-    dataInicoAlocacao = models.DateField(null=False, blank=False, default=timezone.now)
-    dataFimAlocacao = models.DateField(null=True, blank=True)
 
 class SuperPalet(models.Model):
     codigoBarras = models.CharField(max_length=40, blank=False, null=False)
@@ -103,5 +45,22 @@ class SuperPalet(models.Model):
 
     def __str__(self):
         return str(self.codigoBarras)
+
+class NotaFiscal (models.Model):
+    numero = models.IntegerField(null=False, blank=False)
+    serie = models.IntegerField(null=True, blank=True)
+    dataCriacao = models.DateField(null=False, blank=False, default=timezone.now)
+    status = models.CharField(choices=STATUS, null=False, blank=False, max_length=20, default='ABERTA')
+
+    def __str__(self):
+        return str(self.numero)
+
+
+class NotaFiscalProduto(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    notaFiscal = models.ForeignKey(NotaFiscal, on_delete=models.CASCADE)
+    quantidade = models.IntegerField(null=False, blank=False)
+
+
 
 

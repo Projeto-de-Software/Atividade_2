@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
+<nav class="navbar navbar-vertical fixed-left navbar-expand-xl navbar-light bg-white" id="sidenav-main">
     <div class="container-fluid">
       <!-- Toggler -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,11 +10,11 @@
         <img src="{% static 'assets/img/brand/logo.png' %}" class="navbar-brand-img" alt="...">
       </a>
       <!-- User -->
-      <ul class="nav align-items-center d-md-none">
+      <ul class="nav align-items-center d-lg-none">
       </ul>
-        <div class="navbar-collapse collapse" id="sidenav-collapse-main" style="">
+        <div class="navbar-collapse  collapse" id="sidenav-collapse-main" style="">
         <!-- Collapse header -->
-            <div class="navbar-collapse-header d-md-none">
+            <div class="navbar-collapse-header d-lg-none">
               <div class="row">
                 <div class="col-6 collapse-brand">
                   <a href="/">
@@ -50,11 +50,11 @@
               <i class="fa fa-arrow-circle-right"></i> Produtos
             </a>
           </li>
-{#          <li class="nav-item ">#}
-{#            <a class="nav-link all-nav-item setor" href="{% url 'listarSetor'%}">#}
-{#              <i class="fa fa-arrow-circle-right"></i> Setor#}
-{#            </a>#}
-{#          </li>#}
+          <li class="nav-item ">
+            <a class="nav-link all-nav-item setor" href="{% url 'listarNotaFisca'%}">
+              <i class="fa fa-arrow-circle-right"></i> Nota Fiscal
+            </a>
+          </li>
 {#            <li class="nav-item ">#}
 {#            <a class="nav-link all-nav-item regra" href="{% url 'listarTipoCaixa'%}">#}
 {#              <i class="fa fa-arrow-circle-right"></i> Regra#}
