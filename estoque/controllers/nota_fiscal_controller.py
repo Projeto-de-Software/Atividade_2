@@ -56,13 +56,12 @@ def checkProdutosSaidaNotaFiscal(request, id):
     else:
         produtos = NotaFiscalProduto.objects.filter(notaFiscal_id=id).values()
 
-
         for p in produtos:
             palletsAntigos = SuperPalet.objects.filter(produto_id=p['id']).values().order_by('dataArmazenamento')
             quantidadeProduto = p['quantidade']
             palletsIndicados = []
 
-            produtoName = Produto.objects.filter(id=p['id']).first()
+            produtoName = Produto.objects.filter(id=p['produto_id']).first()
             p['produto'] = produtoName
 
             if (palletsAntigos != None):
