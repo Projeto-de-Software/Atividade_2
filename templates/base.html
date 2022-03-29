@@ -35,6 +35,9 @@
     </div>
     <div class="container-fluid mt--7">
       <div class="row">
+          {% block caminho %}
+
+          {% endblock  %}
           {% block main %}
           
           {% endblock %}
@@ -127,5 +130,11 @@
     
     {% endblock %}
 </body>
-
+    <script>
+        $('#id_rua_id').attr('disabled', true)
+        $('#id_paleteira_id').attr('disabled', true)
+        $(':disabled').each(function(){
+            $(this).after('<input type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '" />');
+        });
+    </script>
 </html>

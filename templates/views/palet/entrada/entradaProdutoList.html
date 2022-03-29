@@ -6,38 +6,56 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Produtos</h3>
-                    <a class="btn btn-primary float-right" href="{% url 'produtoCreate' %}"><i class="fa fa-plus-circle"></i> Novo Produto</a>
+                  <h3 class="mb-3">Selecione um produto:</h3>
+{#                    <a class="btn btn-primary float-right" href="{% url 'produtoCreate' %}"><i class="fa fa-plus-circle"></i> Novo Produto</a>#}
                 </div>
               </div>
+            </div>
+            <div class="col-md-4 col-sm-12 mb-3 ">
+                <input class="form-control" id="myInputFilter" type="text" placeholder="Filtro..">
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
+                    <th scope="col">Código de barras</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Opções</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableProduto">
                   {% for produto in produtos_list %}
                       <tr>
+                          <th scope="row">
+                            {{ produto.cd_barras }}
+                        </th>
                         <th scope="row">
                             {{ produto.nm_produto }}
                         </th>
                         <td>
                             <div>
-                                <a class="btn btn-warning float-left" href="{% url 'produtoUpdate' pk=produto.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
-                                <a class="btn btn-danger float-left deletar" url="{% url 'produtoDelete' pk=produto.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                                <a class="btn btn-warning float-left" href="{% url 'entradaLocalizacaoList' idProduto=produto.id %}">Selecionar</a>
                             </div>
                         </td>
                       </tr>
                   {% endfor %}
-
                 </tbody>
               </table>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+      $("#myInputFilter").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#tableProduto tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
 {% endblock %}

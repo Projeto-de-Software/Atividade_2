@@ -6,6 +6,15 @@
     <h3 class="mb-0">{{ page_name }}</h3>
 {% endblock title_page %}
 
+{% block caminho %}
+    <div class="col-12 mb-2">
+        {% for caminho in caminhos %}
+            <a class="text-white" href="{{ caminho.path }}">{{ caminho.name }} / </a>
+        {% endfor %}
+    </div>
+{% endblock  %}
+
+
 {% block form_body %}
     <form method="post" action="">
         {% csrf_token %}

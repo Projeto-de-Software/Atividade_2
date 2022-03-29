@@ -22,6 +22,8 @@ TIPO_CAIXA = (
     ('PL', 'PLÁSTICO')
 )
 
+BOOL_CHOICES = ((True, 'Sim'), (False, 'Não'))
+
 TP_PALETEIRA = (
     ('C', 'CORREDOR'),
     ('N', 'NORMAL')
@@ -40,15 +42,18 @@ class Produto(models.Model):
     qt_unid_cx_papelao = models.IntegerField(blank=False, null=False)
     qt_unid_cx_plastico = models.IntegerField(blank=False, null=False)
     sn_ativo = models.BooleanField(blank=False, null=False, default=True) #Validação atualização
-    sn_deletado = models.BooleanField(blank=False, null=False, default=True) #Validação excliusão
+    sn_deletado = models.BooleanField(blank=False, null=False, default=False) #Validação excliusão
+
+    def __str__(self):
+        return str(self.cd_barras)+ " - " + str(self.nm_produto)
 
 class Pallet (models.Model):
     produto_id = models.ForeignKey(Produto, on_delete=models.CASCADE)
     cd_barras = models.CharField(max_length=20, blank=False, null=False)
-    tp_embalagem = models.CharField(max_length=10, blank=False, null=False, choices=TIPO_EMBALAGEM)
+    tp_embalagem = models.CharField(max_length=10, blank=False, null=False, choices=TIPO_CAIXA)
     qt_unidade = models.IntegerField(blank=False, null=False)
     dt_fabricacao = models.DateField(auto_now=True, blank=False, null=False)
-    sn_sobra = models.BooleanField(blank=False, null=False, default=False) #Validação de sobra de produção
+    sn_sobra = models.BooleanField(blank=False, null=False, default=False, choices=BOOL_CHOICES) #Validação de sobra de produção
     sn_armazenado = models.BooleanField(blank=False, null=False, default=True) #Validação de o pallet ainda estar no sistema
 
 class Caixa(models.Model):
@@ -59,20 +64,26 @@ class Caixa(models.Model):
 class Rua (models.Model):
     nm_rua = models.CharField(max_length=50, blank=False, null=False)
     sn_ativo = models.BooleanField(blank=False, null=False, default=True) #Validação atualização
-    sn_deletado = models.BooleanField(blank=False, null=False, default=True) #Validação excliusão
+    sn_deletado = models.BooleanField(blank=False, null=False, default=False) #Validação excliusão
+
+    def __str__(self):
+        return self.nm_rua
 
 class RuaProduto(models.Model):
     produto_id = models.ForeignKey(Produto, on_delete=models.CASCADE)
     rua_id = models.ForeignKey(Rua, on_delete=models.CASCADE)
     sn_ativo = models.BooleanField(blank=False, null=False, default=True) #Validação atualização
-    sn_deletado = models.BooleanField(blank=False, null=False, default=True) #Validação excliusão
+    sn_deletado = models.BooleanField(blank=False, null=False, default=False) #Validação excliusão
 
 class Paleteira (models.Model):
     rua_id = models.ForeignKey(Rua, on_delete=models.CASCADE)
     nr_paleteira = models.IntegerField(blank=False, null=False)
     tp_paleteira = models.CharField(max_length=2, blank=False, null=False, choices=TP_PALETEIRA, default='N')
     sn_ativo = models.BooleanField(blank=False, null=False, default=True) #Validação atualização
-    sn_deletado = models.BooleanField(blank=False, null=False, default=True) #Validação excliusão
+    sn_deletado = models.BooleanField(blank=False, null=False, default=False) #Validação excliusão
+
+    def __str__(self):
+        return str(self.nr_paleteira)
 
 class Bloco (models.Model):
     paleteira_id = models.ForeignKey(Paleteira,on_delete=models.CASCADE)
@@ -80,7 +91,7 @@ class Bloco (models.Model):
     cd_bloco = models.CharField(max_length=3, blank=False, null=False)
     qt_fileiras_pallet = models.IntegerField(blank=False, null=False)
     sn_ativo = models.BooleanField(blank=False, null=False, default=True) #Validação atualização
-    sn_deletado = models.BooleanField(blank=False, null=False, default=True) #Validação excliusão
+    sn_deletado = models.BooleanField(blank=False, null=False, default=False) #Validação excliusão
 
 class PalletBloco(models.Model):
     pallet_id = models.ForeignKey(Pallet, on_delete=models.CASCADE)

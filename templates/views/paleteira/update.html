@@ -3,13 +3,12 @@
 
 
 {% block title_page %}
-    <h3 class="mb-0">{{ page_name }}</h3>
+    <h3 class="mb-0">Produto - {{ nome }}</h3>
 {% endblock title_page %}
 
 {% block form_body %}
-    <form method="post" action="">
+    <form method="post" action="{% url 'atualizarProduto' id=id%}">
         {% csrf_token %}
-        {{ form.errors}}
         {{form | bootstrap}}
         <button class="btn btn-primary float-right" type="submit">Salvar</button>
     </form>

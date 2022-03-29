@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block main %}
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Ruas - Produtos</h3>
+{#                    <a class="btn btn-primary float-right" href="{% url 'ruaCreate' %}"><i class="fa fa-plus-circle"></i> Nova Rua</a>#}
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card bg-secondary shadow">
+                <div class="card-body">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        {{ form.errors}}
+                        {{form | bootstrap}}
+                        <button class="btn btn-primary float-right" type="submit">Salvar</button>
+                    </form>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive mt-5">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nome do produtos</th>
+                    <th scope="col">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for p in produtos %}
+                      <tr>
+                        <th scope="row">
+                            {{ p.produto_id.nm_produto }}
+                        </th>
+                        <td>
+                            <div>
+                                <a class="btn btn-danger float-left deletar" url="{% url 'ruaProdutoDelete' pk=p.id idRua=idRua %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                            </div>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+

@@ -6,8 +6,8 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Produtos</h3>
-                    <a class="btn btn-primary float-right" href="{% url 'produtoCreate' %}"><i class="fa fa-plus-circle"></i> Novo Produto</a>
+                  <h3 class="mb-0">{{ page_name }}</h3>
+                    <a class="btn btn-primary float-right" href="{% url 'blocoCreate' idRua=idRua idPaleteira=idPaleteira %}"><i class="fa fa-plus-circle"></i> Novo <Bloco></Bloco></a>
                 </div>
               </div>
             </div>
@@ -21,15 +21,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for produto in produtos_list %}
+                  {% for bloco in bloco_list %}
                       <tr>
                         <th scope="row">
-                            {{ produto.nm_produto }}
+                            {{ bloco.cd_bloco }}
                         </th>
                         <td>
                             <div>
-                                <a class="btn btn-warning float-left" href="{% url 'produtoUpdate' pk=produto.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
-                                <a class="btn btn-danger float-left deletar" url="{% url 'produtoDelete' pk=produto.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                                <a class="btn btn-warning float-left" href="{% url 'blocoUpdate' pk=bloco.id idRua=idRua idPaleteira=idPaleteira %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
+                                <a class="btn btn-danger float-left deletar" url="{% url 'blocoDelete' pk=bloco.id  idRua=idRua idPaleteira=idPaleteira %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
                             </div>
                         </td>
                       </tr>

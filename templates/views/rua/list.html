@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block caminho %}
+    <div class="col-12 mb-2">
+        {% for caminho in caminhos %}
+            <a class="text-white" href="{{ caminho.path }}">{{ caminho.name }} / </a>
+        {% endfor %}
+    </div>
+{% endblock  %}
+
+{% block main %}
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Ruas</h3>
+                    <a class="btn btn-primary float-right" href="{% url 'ruaCreate' %}"><i class="fa fa-plus-circle"></i> Nova Rua</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for rua in rua_list %}
+                      <tr>
+                        <th scope="row">
+                            {{ rua.nm_rua }}
+                        </th>
+                        <td>
+                            <div>
+                                <a class="btn btn-warning float-left" href="{% url 'ruaUpdate' pk=rua.id %}"><i class="fa fa-pencil-alt fa-1x text-white"></i></a>
+                                <a class="btn btn-primary float-left" href="{% url 'paleteiras' idRua=rua.id %}"><i class="fa fa-palette fa-lg text-white"></i></a>
+                                 <a class="btn btn-primary float-left" href="{% url 'ruasProdutos' idRua=rua.id %}"><i class="fa fa-product-hunt fa-lg text-white"></i></a>
+                                <a class="btn btn-danger float-left deletar" url="{% url 'ruaDelete' pk=rua.id  %}"><i class="fa fa-trash-alt fa-lg text-white"></i></a>
+                            </div>
+                        </td>
+                      </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
