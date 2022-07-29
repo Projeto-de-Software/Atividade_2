@@ -1,0 +1,129 @@
+{% extends 'views/forms.html' %}
+
+{% block title_page %}
+    Grafos
+{% endblock %}
+
+{% block form_body %}
+    <form method="post">
+        <h6 class="heading-small text-muted mb-4">Dados</h6>
+        <div class="pl-lg-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-username">Tipo de busca</label>
+                            <select class="form-control" id="tipoBusca">
+                                  <option value="L">Busca em lagura</option>
+                                  <option value="P">Busca em profundidade</option>
+                            </select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-username">Grafo</label>
+                        <input type="text" id="grafo" class="form-control form-control-alternative" placeholder="Insira um grafo" >
+                        <button type="button" id="adicionaGrafo" class="btn btn-primary float-lg-right mt-2 mb-2">Adicionar</button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-email">Arestas</label>
+                            <select class="form-control" id="arestasGrafo">
+                              <option>1</option>
+                              <option>2</option>
+                              <option>3</option>
+                              <option>4</option>
+                              <option>5</option>
+                            </select>
+                        <button type="button" class="btn btn-primary float-lg-right mt-2 mb-2">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Inicial</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Remover</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableGrafos">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-lg-6">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Remover</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary float-lg-right mt-5 mb-2">Gerar</button>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+     let arrayGrafo = []
+    function removerGrafo(nomeGrafo){
+        arrayGrafo = arrayGrafo.filter(element => element.nome != nomeGrafo);
+        reloadTableGrafos();
+    }
+
+    function reloadTableGrafos(){
+        $('#tableGrafos').html("");
+        arrayGrafo.forEach(element => {
+            $('#tableGrafos').append(`<tr>
+                <th scope="row">${element.nome}</th><td><input class="partida" data-on="&nbsp;" data-off="&nbsp;" nomeGrafo="${element.nome}" type="checkbox" data-toggle="toggle" data-style="ios"></td>  <td><input class="destino form-check-input" data-toggle="toggle" data-style="ios" nomeGrafo="${element.nome}" data-on="&nbsp;" data-off="&nbsp;" type="checkbox" value=""></td><td><button type="button" onclick="removerGrafo('${element.nome}')" class="btn btn-danger">Remover</button></td></tr>`);
+        });
+        $(function(){ $('.partida').bootstrapToggle() });
+        $(function(){ $('.destino').bootstrapToggle() });
+    }
+
+    $(document).ready(() => {
+
+        $("#adicionaGrafo").click( () => {
+            let nomeGrafo = $("#grafo").val();
+
+            if (nomeGrafo.length < 1){
+                alert("Não é possível criar um grafo com valor vazio");
+                return;
+            }
+
+            let verificarGrafoAdicionado = arrayGrafo.find(elemet => elemet.nome == nomeGrafo);
+            if (verificarGrafoAdicionado){
+                alert("Grafo já adicionado, por favor adicione outro grafo");
+                return;
+            }
+
+            arrayGrafo.push({
+                nome: nomeGrafo,
+                arestas: [],
+                partida: false,
+                destino: false
+            });
+
+            reloadTableGrafos();
+
+        });
+
+    });
+
+    </script>
+{% endblock %}
