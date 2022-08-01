@@ -4,4 +4,5 @@ from .controllers import *
 
 urlpatterns = [
     path("", loadPageGrafo , name='grafoInicial'),
+    path("grafo", gerarGrafo , name='gerarGrafo'),
 ]

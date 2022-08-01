@@ -28,25 +28,21 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="form-control-label" for="input-email">Arestas</label>
-                            <select class="form-control" id="arestasGrafo">
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
+                            <select class="form-control arestasGrafo select-search" id="arestasSelect">
+
                             </select>
-                        <button type="button" class="btn btn-primary float-lg-right mt-2 mb-2">Adicionar</button>
+                        <button type="button" id="adiconarAresta" class="btn btn-primary float-lg-right mt-2 mb-2">Adicionar</button>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-4">
                 <div class="col-lg-6">
-                    <table class="table table-striped">
+                    <h4>Grafos</h4>
+                    <table class="table table-bordered ">
                         <thead>
                         <tr>
+                            <th scope="col">Selecionar</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Inicial</th>
-                            <th scope="col">Destino</th>
                             <th scope="col">Remover</th>
                         </tr>
                         </thead>
@@ -56,47 +52,155 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <table class="table table-striped">
+                    <h4>Arestas</h4>
+                    <table class="table table-bordered ">
                         <thead>
                         <tr>
                             <th scope="col">Nome</th>
                             <th scope="col">Remover</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                        </tr>
+                        <tbody id="tableArestas">
                         </tbody>
                     </table>
                 </div>
 
             </div>
+            <div class="row mt-4">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-email">Inicio</label>
+                            <select class="form-control arestasGrafo select-search" id="inicio">
+
+                            </select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-email">Fim</label>
+                            <select class="form-control arestasGrafo select-search" id="fim">
+
+                            </select>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button type="button" class="btn btn-primary float-lg-right mt-5 mb-2">Gerar</button>
+        <button type="button" id="btnGerar" class="btn btn-primary float-lg-right mt-5 mb-2">Gerar</button>
+
+        <div class="row mt-4 resultado d-none">
+            <div class="col-12 align-content-center">
+                <h4>Grafo</h4>
+                <img id="imagemGrafo" src="">
+            </div>
+            <div class="col-12 mt-4">
+                 <h4 id="nomeBuscaRetorno"></h4>
+                 <img id="imagemBusca" src="">
+            </div>
+        </div>
     </form>
 {% endblock %}
 
 {% block js %}
+
+    <style>
+    {#input[type="radio"] {#}
+    {#  -ms-transform: scale(2); /* IE 9 */#}
+    {#  -webkit-transform: scale(2); /* Chrome, Safari, Opera */#}
+    {#  transform: scale(2);#}
+    {#}#}
+    </style>
     <script>
-     let arrayGrafo = []
+     let arrayGrafo = [];
+     let grafoSelecionado;
     function removerGrafo(nomeGrafo){
         arrayGrafo = arrayGrafo.filter(element => element.nome != nomeGrafo);
         reloadTableGrafos();
     }
 
-    function reloadTableGrafos(){
+    function reloadTableGrafos() {
+        let inicio = $("#inicio").val();
+        let fim = $("#fim").val();
+
         $('#tableGrafos').html("");
+        $(".arestasGrafo").html("");
+
         arrayGrafo.forEach(element => {
             $('#tableGrafos').append(`<tr>
-                <th scope="row">${element.nome}</th><td><input class="partida" data-on="&nbsp;" data-off="&nbsp;" nomeGrafo="${element.nome}" type="checkbox" data-toggle="toggle" data-style="ios"></td>  <td><input class="destino form-check-input" data-toggle="toggle" data-style="ios" nomeGrafo="${element.nome}" data-on="&nbsp;" data-off="&nbsp;" type="checkbox" value=""></td><td><button type="button" onclick="removerGrafo('${element.nome}')" class="btn btn-danger">Remover</button></td></tr>`);
+            <td><div class="custom-control custom-radio">
+                  <input type="radio" onchange="clickRadio(this)" id="customRadio_${element.nome}" nomeGrafo="${element.nome}" name="customRadio"  class="radio custom-control-input">
+                  <label class="custom-control-label" for="customRadio_${element.nome}"></label>
+                </div>
+            </td><th scope="row">${element.nome}</th><td><button type="button" onclick="removerGrafo('${element.nome}')" class="btn btn-danger">Remover</button></td></tr>`);
+            $(".arestasGrafo").append(`<option value="${element.nome}">${element.nome}</option>`);
+
         });
-        $(function(){ $('.partida').bootstrapToggle() });
-        $(function(){ $('.destino').bootstrapToggle() });
+
+        $(".select-search").chosen();
+        $(".select-search").trigger("chosen:updated");
+
+        $("#inicio").val(inicio).trigger("chosen:updated");
+        $("#arestasSelect").val(null).trigger("chosen:updated");
+        $("#fim").val(fim).trigger("chosen:updated");
+
+    }
+
+    function clickRadio(context){
+         let nomeGrafo = $(context).attr("nomeGrafo");
+         selectGrafo(nomeGrafo);
+    }
+
+
+    function removerAresta(nomeGrafo, aresta){
+        for (let i = 0; i < arrayGrafo.length; i++){
+            if (arrayGrafo[i].nome == nomeGrafo){
+                arrayGrafo[i].arestas = arrayGrafo[i].arestas.filter(element => element != aresta);
+            }
+        }
+        selectGrafo(nomeGrafo);
+    }
+
+    function adicionarAresta(nomeGrafo, aresta){
+         for (let i = 0; i < arrayGrafo.length; i++){
+            if (arrayGrafo[i].nome == nomeGrafo){
+                if (!arrayGrafo[i].arestas.includes(aresta)){
+                    arrayGrafo[i].arestas.push(aresta);
+                } else {
+                    alert("Aresta já adicionada.");
+                }
+            }
+            if (arrayGrafo[i].nome == aresta){
+                if (!arrayGrafo[i].arestas.includes(nomeGrafo)){
+                    arrayGrafo[i].arestas.push(nomeGrafo);
+                } else {
+                    alert("Aresta já adicionada.");
+                }
+            }
+        }
+        selectGrafo(nomeGrafo);
+    }
+
+    function selectGrafo(nomeGrafo){
+         $('#tableArestas').html("");
+         grafoSelecionado = nomeGrafo;
+        for (let i = 0; i < arrayGrafo.length; i++){
+
+            if (arrayGrafo[i].nome == nomeGrafo){
+                arrayGrafo[i].arestas.forEach(element => {
+                    $('#tableArestas').append(`<tr><th scope="row">${element}</th><td><button type="button" onclick="removerAresta('${element}')" class="btn btn-danger">Remover</button></td></tr>`);
+                })
+            }
+        }
     }
 
     $(document).ready(() => {
+
+        $("#adiconarAresta").click(() => {
+            if (grafoSelecionado == null){
+                alert("Por favor, selecione um grafo para que seja adicionada uma aresta.");
+            }else {
+                adicionarAresta(grafoSelecionado, $('#arestasSelect').val());
+            }
+        });
 
         $("#adicionaGrafo").click( () => {
             let nomeGrafo = $("#grafo").val();
@@ -123,7 +227,45 @@
 
         });
 
+        $("#btnGerar").click(() => {
+            $('.resultado').removeClass('d-block');
+            if (arrayGrafo.length == 0){
+                alert("Por favor, adicione ao menos um vertice do grafo.");
+                return;
+            }
+
+            if ($("#inicio").val() == null || $("#inicio").val() == undefined){
+                alert("Por favor, Defina o nó de início da busca");
+                return;
+            }
+
+            if ($("#fim").val() == null || $("#inicio").val() == undefined){
+                alert("Por favor, Defina o nó de destino da busca");
+                return;
+            }
+
+
+            $('.resultado').addClass('d-none');
+
+            $.post( "grafo", {
+                data: JSON.stringify(arrayGrafo),
+                tipoBusca: $("#tipoBusca").val(),
+                inicio: $("#inicio").val(),
+                fim: $("#fim").val()
+            }, (data) => {
+                $('#imagemGrafo').attr('src', 'data:image/png;base64,'+data.grafo);
+                $('#imagemBusca').attr('src', 'data:image/png;base64,'+data.busca);
+                $("#nomeBuscaRetorno").text(data.nomeBusca);
+                $('.resultado').removeClass('d-none');
+                $('.resultado').addClass('d-block');
+            }).catch(err => {
+                console.log(err);
+                alert("Não foi possível realizar o processamento do grafo");
+            });
+        })
+
     });
+
 
     </script>
 {% endblock %}
