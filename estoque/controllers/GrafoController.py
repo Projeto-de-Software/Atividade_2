@@ -19,12 +19,15 @@ def gerarGrafo(request):
 
     # Adicionando os nós
     for no in grafo:
-        G.add_node(no['nome'])
+        node = int(no['nome'])
+        G.add_node(node)
 
     # Adicionando as arestas
     for no in grafo:
         for aresta in no["arestas"]:
-            G.add_edge(no['nome'], aresta)
+            node1 = int(no['nome'])
+            node2 = int(aresta)
+            G.add_edge(node1, node2)
 
     # Gerando o buffer do grafo
     figure = io.BytesIO()
@@ -37,14 +40,10 @@ def gerarGrafo(request):
     graphic = base64.b64encode(image_png)
     graphic = graphic.decode('utf-8')
 
-    return JsonResponse({'grafo': graphic,
-                         'nomeBusca': 'Busca em Largura',
-                         'busca': graphic})
-
     # Gerando o grafo da busca em largura
-    if (request.POST.get('tipoBusca') == 'L'):
+    if (request.POST.get('tipoBusca') == 'P'):
         figure2 = io.BytesIO()
-        T = nx.dfs_tree(G, source=2, depth_limit=8)
+        T = nx.dfs_tree(G, source=int(request.POST.get('inicio')))
         nx.draw(T, with_labels=True, font_weight='bold', font_size=8, node_size=1200, node_color='red')
         plt.savefig(figure2, format="png")
         figure2.seek(0)
@@ -55,25 +54,25 @@ def gerarGrafo(request):
         graphic2 = graphic2.decode('utf-8')
 
         return JsonResponse({'grafo': graphic,
-                                                'nomeBusca': 'Busca em Largura',
+                                                'nomeBusca': 'Busca em Profundidade',
                                                 'busca': graphic2})
 
     # Gerando o grafo da busca em profundidade
 
     else:
         figure2 = io.BytesIO()
-        H = nx.bfs_tree(G, source=2, reverse=False, depth_limit=8)
+        H = nx.bfs_tree(G, source=int(request.POST.get('inicio')), reverse=False)
         nx.draw(H, with_labels=True, font_weight='bold', font_size=8, node_size=1200, node_color='yellow')
-        plt.savefig(figure, format="png")
+        plt.savefig(figure2, format="png")
         figure2.seek(0)
-        image_png2 = figure.getvalue()
+        image_png2 = figure2.getvalue()
         figure2.close()
         plt.close()
         graphic2 = base64.b64encode(image_png2)
         graphic2 = graphic2.decode('utf-8')
 
         return JsonResponse({'grafo': graphic,
-                                                'nomeBusca': 'Busca em Profundidade',
+                                                'nomeBusca': 'Busca em Largura',
                                                 'busca': graphic2})
 
 

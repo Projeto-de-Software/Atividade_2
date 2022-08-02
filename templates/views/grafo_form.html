@@ -20,8 +20,8 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="form-control-label" for="input-username">Grafo</label>
-                        <input type="text" id="grafo" class="form-control form-control-alternative" placeholder="Insira um grafo" >
+                        <label class="form-control-label" for="input-username">Nó</label>
+                        <input  type="number" id="grafo" class="form-control form-control-alternative" placeholder="Insira um nó" >
                         <button type="button" id="adicionaGrafo" class="btn btn-primary float-lg-right mt-2 mb-2">Adicionar</button>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
             </div>
             <div class="row mt-4">
                 <div class="col-lg-6">
-                    <h4>Grafos</h4>
+                    <h4>Nós</h4>
                     <table class="table table-bordered ">
                         <thead>
                         <tr>
@@ -85,16 +85,20 @@
                 </div>
             </div>
         </div>
-        <button type="button" id="btnGerar" class="btn btn-primary float-lg-right mt-5 mb-2">Gerar</button>
+        <button type="button" id="btnGerar" class="btn btn-primary float-right mt-2">Gerar</button>
 
         <div class="row mt-4 resultado d-none">
-            <div class="col-12 align-content-center">
+            <div class="col-6 align-content-center mb-5">
                 <h4>Grafo</h4>
                 <img id="imagemGrafo" src="">
+                <br>
+                <button type="button" id="salvarImg" class="btn btn-primary salvarImg mt-4 ">Salvar</button>
             </div>
-            <div class="col-12 mt-4">
+            <div class="col-7 mt-5 ">
                  <h4 id="nomeBuscaRetorno"></h4>
                  <img id="imagemBusca" src="">
+                 <br>
+                 <button type="button" id="salvarImgBusca" class="btn btn-primary salvarImg mt-4">Salvar</button>
             </div>
         </div>
     </form>
@@ -194,6 +198,15 @@
 
     $(document).ready(() => {
 
+        $('#salvarImgBusca').click(() => {
+            downloadBase64File($('#imagemGrafo').attr('src'), 'Grafo.png');
+
+        });
+
+        $('#salvarImg').click(() => {
+            downloadBase64File($('#imagemBusca').attr('src'), 'busca.png');
+        });
+
         $("#adiconarAresta").click(() => {
             if (grafoSelecionado == null){
                 alert("Por favor, selecione um grafo para que seja adicionada uma aresta.");
@@ -265,6 +278,17 @@
         })
 
     });
+
+    function downloadBase64File(contentBase64, fileName) {
+        const linkSource = `${contentBase64}`;
+        const downloadLink = document.createElement('a');
+        document.body.appendChild(downloadLink);
+
+        downloadLink.href = linkSource;
+        downloadLink.target = '_self';
+        downloadLink.download = fileName;
+        downloadLink.click();
+    }
 
 
     </script>
